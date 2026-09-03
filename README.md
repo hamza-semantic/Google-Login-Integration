@@ -1,97 +1,143 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# MajorLift
 
-# Getting Started
+A React Native (CLI) mobile application with email/password authentication and Google Sign-In, built with Redux Toolkit for state management and Axios for API communication.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## Tech Stack
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- **React Native CLI** `0.87.1`
+- **React** `19.2.3`
+- **TypeScript**
+- **Redux Toolkit** — global state management
+- **React Navigation** (Native Stack) — screen navigation
+- **Axios** — API requests, with request/response interceptors
+- **AsyncStorage** — local session persistence
+- **@react-native-google-signin/google-signin** — Google authentication (Android)
+- **react-native-vector-icons** — icons (e.g. Google icon on the "Continue with Google" button)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
+## Features
+
+- Email/password Login & Signup
+- Google Sign-In (Android)
+- Persistent sessions via AsyncStorage
+- Centralized API layer with Axios interceptors (auto-attaches auth token, handles 401 responses)
+- Redux-managed auth state
+
+---
+
+## Project Structure
+
+```
+src/
+├── components/          # Reusable UI components (Button, Input, Card, Header)
+├── config/               # App-level config (colors, API base URL)
+├── features/
+│   ├── auth/
+│   │   └── screens/      # Login, Signup screens
+│   └── home/
+│       └── screens/      # Home screen
+├── navigation/           # RootNavigator (React Navigation stack)
+├── services/
+│   ├── api-endpoints.ts  # All API route paths
+│   ├── auth.ts           # authService — login, signup, googleLogin
+│   ├── google-auth.ts    # Google Sign-In wrapper (configure, signIn, signOut)
+│   └── http-client.ts    # Axios instance + interceptors
+├── store/
+│   ├── authSlice.ts      # Redux auth state (user, isLoggedIn)
+│   └── index.ts          # Redux store configuration
+├── types/                # Shared TypeScript types
+└── utils/
+    └── storage.ts         # AsyncStorage helpers for session token
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js `>= 22.11.0`
+- Android Studio (with an emulator or a physical device connected via USB debugging)
+- JDK (as required by your React Native/Android setup)
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Start Metro bundler
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+# Run on Android (in a separate terminal)
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
+**iOS (not the focus of this project's current auth work, but for completeness):**
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
+```bash
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+> If you run into setup issues, see React Native's [Troubleshooting guide](https://reactnative.dev/docs/troubleshooting).
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Environment / API Configuration
 
-## Step 3: Modify your app
+The API base URL is set in `src/config/index.ts`:
 
-Now that you have successfully run the app, let's make changes!
+```typescript
+export const API_URL = 'https://dummyjson.com'; // currently a mock/testing API
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+Update this to point to your real backend once available.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+---
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## Authentication
 
-## Congratulations! :tada:
+### Email/Password
 
-You've successfully run and modified your React Native App. :partying_face:
+Standard login/signup flow via `authService.login()` / `authService.signup()`, hitting the configured `API_URL`.
 
-### Now what?
+### Google Sign-In (Android)
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Google Sign-In is fully configured and working on the mobile side (account picker, token retrieval, cancellation/error handling, sign-out). Full setup steps — including Google Cloud Console configuration, OAuth Client IDs, SHA-1 fingerprint generation, and code walkthrough — are documented separately:
 
-# Troubleshooting
+📄 **[docs/GOOGLE_LOGIN.md](./docs/GOOGLE_LOGIN.md)**
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+> ⚠️ **Note:** Backend verification of the Google ID Token is not yet integrated (see the "Pending Work" section in the doc above) — the current API (`dummyjson.com`) is a mock API with no Google auth endpoint. This is a known, documented limitation, not a bug.
 
-# Learn More
+> iOS Google Sign-In is intentionally out of scope for this project at this time.
 
-To learn more about React Native, take a look at the following resources:
+---
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm start` | Start Metro bundler |
+| `npm run android` | Build & run on Android |
+| `npm run ios` | Build & run on iOS |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Jest tests |
+
+---
+
+## Known Limitations
+
+- Backend is currently a placeholder (`dummyjson.com`); real API integration pending.
+- Google ID Token is temporarily used as the session token until real backend verification is wired in.
+- Only debug-keystore SHA-1 is registered with Google — a release-keystore SHA-1 must be added before a production/Play Store build.
+
+---
+
+## Learn More (React Native)
+
+- [React Native Website](https://reactnative.dev)
+- [Environment Setup](https://reactnative.dev/docs/environment-setup)
+- [Basics Guide](https://reactnative.dev/docs/getting-started)

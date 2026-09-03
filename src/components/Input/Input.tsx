@@ -1,0 +1,28 @@
+import React from 'react';
+import { View, TextInput, Text, TextInputProps } from 'react-native';
+import { styles } from './Input.styles';
+
+export interface InputProps extends TextInputProps {
+  label?: string;
+  error?: string;
+}
+
+const Input: React.FC<InputProps> = ({ label, error, style, ...rest }) => {
+
+  return (
+    <View style={styles.container}>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
+      
+      <TextInput
+        style={[styles.input, error ? styles.inputError : null, style]}
+        placeholderTextColor="#999"
+        autoCapitalize="none"
+        {...rest}
+      />
+
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+    </View>
+  );
+};
+
+export default Input;
