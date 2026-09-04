@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import { authService } from '../../../services/auth';
@@ -35,6 +35,9 @@ const Signup = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.welcomeText}>Register</Text>
+      <Text style={styles.subText}>Create a new account to get started</Text>
+
       <Input
         label="Full Name"
         value={fullName}
@@ -68,6 +71,17 @@ const Signup = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, justifyContent: 'center' },
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 4,
+  },
+  subText: {
+    fontSize: 14,
+    color: '#777',
+    marginBottom: 32,
+  },
   loginButton: { marginTop: 16, backgroundColor: 'transparent' },
   loginText: { color: '#2E74B5', fontSize: 14, fontWeight: '400' },
 });

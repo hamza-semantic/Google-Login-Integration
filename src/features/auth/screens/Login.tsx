@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { signInWithGoogle } from '../../../services/google-auth';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
@@ -70,6 +70,9 @@ const Login = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.welcomeText}>Welcome</Text>
+      <Text style={styles.subText}>Login to continue</Text>
+
       <Input
         label="Username"
         value={username}
@@ -84,12 +87,12 @@ const Login = ({ navigation }: any) => {
         secureTextEntry
       />
       <Button title="Login" onPress={onSubmit} loading={loading} />
-      <Button
-        title="Don't have an account? Sign Up"
-        onPress={() => navigation.navigate('Signup')}
-        style={styles.signupButton}
-        textStyle={styles.signupText}
-      />
+
+      <View style={styles.dividerContainer}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>OR</Text>
+        <View style={styles.dividerLine} />
+      </View>
 
       <Button
         title="Continue with Google"
@@ -98,15 +101,49 @@ const Login = ({ navigation }: any) => {
         style={styles.googleButton}
         iconName="google"
       />
+
+      <Button
+        title="Don't have an account? Sign Up"
+        onPress={() => navigation.navigate('Signup')}
+        style={styles.signupButton}
+        textStyle={styles.signupText}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, justifyContent: 'center' },
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 4,
+  },
+  subText: {
+    fontSize: 14,
+    color: '#777',
+    marginBottom: 32,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ddd',
+  },
+  dividerText: {
+    marginHorizontal: 12,
+    color: '#999',
+    fontSize: 12,
+    fontWeight: '600',
+  },
   signupButton: { marginTop: 16, backgroundColor: 'transparent' },
   signupText: { color: '#2E74B5', fontSize: 14, fontWeight: '400' },
-  googleButton: { marginTop: 12, backgroundColor: '#DB4437' },
+  googleButton: { backgroundColor: '#DB4437' },
 });
 
 export default Login;
